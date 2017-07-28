@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>To DO List</title>
+  </head>
+  <body>
+    <section class='Adds'>
+        <h1>This is my To Do List</h1>
+        <input type="text" name="todo" value="">
+        <button type="submit" name="addToDo">Add this ToDo</button>
+    </section>
+    <section class='list'>
+        <#____>
+          <button type="button" name="markCom">Mark Complete</button>
+          <span>{{todo}}</span>
+        </____>
+    </section>
+    <section class='completed'>
+        <h2>Completed To Do's</h2>
+        <span>{{todo}}</span>
+        <!-- css line through -->
+    </section>
+  </body>
+</html>
