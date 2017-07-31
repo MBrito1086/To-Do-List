@@ -14,24 +14,22 @@
       </form>
     </section>
     <section class='list'>
-        {{#todosList}}
+        {{#uncompleted}}
         <form class="form2" action="/markCom" method="post">
           <ul>
             <li>
-              <button type="submit"  value="{{.}}" name="done">Mark Complete</button>
-              <label for="completed" name="done">
-              <span>{{.}}</span>
-              </label>
+              <button type="submit"  value="{{id}}" name="id">Mark Complete</button>
+              <span>{{todo}}</span>
             </li>
           </ul>
         </form>
-        {{/todosList}}
+        {{/uncompleted}}
     </section>
     <section class='completed'>
         <h2>Completed To Do's</h2>
-        {{#compList}}
-          <p>{{.}}</p>
-        {{/compList}}
+        {{#completed}}
+          <p>{{todo}}</p>
+        {{/completed}}
         <!-- css line through -->
     </section>
   </body>

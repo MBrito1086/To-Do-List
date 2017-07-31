@@ -2,6 +2,7 @@ const express = require('express')
 const mustacheExpress = require('mustache-express')
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
+const expressSession = require('express-session')
 
 const app = express()
 
@@ -15,29 +16,52 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(expressValidator())
 
-// const todoList
+app.use(
+  expressSession({
+    secret: 'keyboard dog',
+    resave: false,
+    saveUninitialized: true
+  })
+)
 
-const todosList = []
-const compList = []
+// const todoList
+//
+// const todosList = []
+// const compList = []
 
 app.get('/', (req, resp) => {
-  resp.render('home', { todosList: todosList, compList: compList } );
+
+  const todoList = req.session.todoList || []
+
+  const templateData = {
+    uncompleted: todoList.filter(todo => !todo.completed),
+    completed: todoList.filter(todo => todo.completed)
+  }
+
+  resp.render('home', templateData );
 })
 
 
 app.post('/', (req, resp) => {
 
-  req
-    .checkBody("todo", "You must add a To Do")
-    .notEmpty();
+  const todoList = req.session.todoList || []
 
-  const errors = req.validationErrors()
+  const newTodo = req.body.todo
 
-  if (errors) {
-    resp.send("Nothing To Do")
-  } else {
-    todosList.push(req.body.todo)
-  }
+  // req
+  //   .checkBody("todo", "You must add a To Do")
+  //   .notEmpty();
+
+  // const errors = req.validationErrors()
+
+  // if (errors) {
+  //   resp.send("Nothing To Do")
+  // } else {
+    todoList.push({ id: todoList.length + 1, completed: false, todo: newTodo })
+  // }
+
+  req.session.todoList = todoList
+
   resp.redirect('/')
 })
 
@@ -45,11 +69,20 @@ app.post('/markCom', (req, resp) => {
 
   // req
   //   .checkBody("done")
+  const todoList = req.session.todoList || []
 
-  compList.push(req.body.done)
+  const id = parseInt(req.body.id)
 
-const indexof = todosList.indexOf(req.body.done)
-todosList.splice(indexof, 1)
+  const todo = todoList.find(todo => todo.id === id)
+
+  if (todo) {
+     todo.completed = true
+
+     req.session.todoList = todoList
+  }
+//
+// const indexof = todosList.indexOf(req.body.done)
+// todosList.splice(indexof, 1)
 
   resp.redirect('/')
 })
