@@ -15,16 +15,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(expressValidator())
 
+// const todoList
+
 const todosList = []
 const compList = []
 
 app.get('/', (req, resp) => {
-  resp.render('home', { todosList: todosList } );
+  resp.render('home', { todosList: todosList, compList: compList } );
 })
 
-app.get('/', (req, resp) => {
-  resp.render('home', { compList: compList } )
-})
 
 app.post('/', (req, resp) => {
 
@@ -43,30 +42,17 @@ app.post('/', (req, resp) => {
 })
 
 app.post('/markCom', (req, resp) => {
-    req
-    .checkBody("done")
-  compList.push(req.params.done)
-  console.log("params: " + req.body.done)
-  console.log("going to compList: " + req.params.done)
+
+  // req
+  //   .checkBody("done")
+
+  compList.push(req.body.done)
+
+const indexof = todosList.indexOf(req.body.done)
+todosList.splice(indexof, 1)
+
   resp.redirect('/')
 })
-
-
-
-// const todos = [
-//   "Wash the car"
-// ];
-//
-// app.get("/", function (req, res) {
-//   res.render('index', { todos: todos });
-// });
-//
-// app.post("/", function (req, res) {
-//   todos.push(req.body.todo);
-//   res.redirect('/');
-// })
-
-
 
 
 app.listen(3000, () => {
